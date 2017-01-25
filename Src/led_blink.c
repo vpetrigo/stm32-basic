@@ -8,10 +8,7 @@ Basic functionality for LED blinking functionality
 #include "stm32l4xx_hal.h"
 #include "simple_delay.h"
 
-// set up hardcoded delay value to 1000 ms
-#define STD_DELAY_VALUE 1000
-
-void LED_Toggle_Timeout(void) {
+void LED_Toggle_Timeout(const uint32_t ms_delay) {
   HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-  Delay(STD_DELAY_VALUE);
+  Delay(ms_delay);
 }
