@@ -35,12 +35,15 @@
 #include "stm32l4xx_hal.h"
 
 /* USER CODE BEGIN Includes */
+#include <string.h>
 #include "led_blink.h"
 #include "button_control.h"
+#include "usart2_io.h"
 
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -55,6 +58,7 @@ uint16_t led_blink_rate[] = {1000, 500, 250, 100};
 void SystemClock_Config(void);
 void Error_Handler(void);
 static void MX_GPIO_Init(void);
+static void MX_USART2_UART_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -69,6 +73,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  const char msg[] = "LED is blinking\n";
 
   /* USER CODE END 1 */
 
@@ -82,6 +87,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART2_UART_Init();
 
   /* USER CODE BEGIN 2 */
   ButtonControl_SetUpRateRange(COUNT_OF(led_blink_rate));
@@ -95,6 +101,9 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
     LED_Toggle_Timeout(led_blink_rate[ButtonControl_GetRate()]);
+    for (size_t i = 0; i < strlen(msg); ++i) {
+      uart2_putc(msg[i], NULL);
+    }
   }
   /* USER CODE END 3 */
 
@@ -107,6 +116,7 @@ void SystemClock_Config(void)
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
@@ -139,6 +149,13 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2;
+  PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
     /**Configure the main internal regulator output voltage 
     */
   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
@@ -158,6 +175,27 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
+/* USART2 init function */
+static void MX_USART2_UART_Init(void)
+{
+
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 115200;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+}
+
 /** Configure pins as 
         * Analog 
         * Input 
@@ -166,8 +204,6 @@ void SystemClock_Config(void)
         * EXTI
         * Free pins are configured automatically as Analog (this feature is enabled through 
         * the Code Generation settings)
-     PA2   ------> USART2_TX
-     PA3   ------> USART2_RX
 */
 static void MX_GPIO_Init(void)
 {
@@ -210,14 +246,6 @@ static void MX_GPIO_Init(void)
                           |GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
-  GPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LD2_Pin */
