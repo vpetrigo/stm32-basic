@@ -44,6 +44,9 @@
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
+// set up hardcoded delay value to 1000 ms
+#define LED_DELAY_VALUE 500
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,7 +90,7 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-    LED_Toggle_Timeout();
+    LED_Toggle_Timeout(LED_DELAY_VALUE);
   /* USER CODE BEGIN 3 */
 
   }
