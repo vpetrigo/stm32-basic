@@ -33,9 +33,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32l4xx_hal.h"
-#include "led_blink.h"
 
 /* USER CODE BEGIN Includes */
+#include "led_blink.h"
 
 /* USER CODE END Includes */
 
@@ -45,7 +45,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 // set up hardcoded delay value to 1000 ms
-#define LED_DELAY_VALUE 500
+#define LED_DELAY_VALUE 1000
 
 /* USER CODE END PV */
 
@@ -90,8 +90,9 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-    LED_Toggle_Timeout(LED_DELAY_VALUE);
+
   /* USER CODE BEGIN 3 */
+    LED_Toggle_Timeout(LED_DELAY_VALUE);
 
   }
   /* USER CODE END 3 */
