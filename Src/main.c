@@ -33,6 +33,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32l4xx_hal.h"
+#include "led_blink.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -86,7 +87,7 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-
+    LED_Toggle_Timeout();
   /* USER CODE BEGIN 3 */
 
   }
