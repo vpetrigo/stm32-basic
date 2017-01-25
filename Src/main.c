@@ -36,6 +36,7 @@
 
 /* USER CODE BEGIN Includes */
 #include "led_blink.h"
+#include "button_control.h"
 
 /* USER CODE END Includes */
 
@@ -43,9 +44,10 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+#define COUNT_OF(x) (sizeof(x) / sizeof(x[0]))
 
-// set up hardcoded delay value to 1000 ms
-#define LED_DELAY_VALUE 1000
+// Array for storing LED blink rates
+uint16_t led_blink_rate[] = {1000, 500, 250, 100};
 
 /* USER CODE END PV */
 
@@ -82,7 +84,7 @@ int main(void)
   MX_GPIO_Init();
 
   /* USER CODE BEGIN 2 */
-
+  ButtonControl_SetUpRateRange(COUNT_OF(led_blink_rate));
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -92,8 +94,7 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    LED_Toggle_Timeout(LED_DELAY_VALUE);
-
+    LED_Toggle_Timeout(led_blink_rate[ButtonControl_GetRate()]);
   }
   /* USER CODE END 3 */
 
