@@ -73,8 +73,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  const char msg[] = "LED is blinking";
   const char msg2[16];
+  uint8_t cur_led_rate = 0;
 
   /* USER CODE END 1 */
 
@@ -104,8 +104,9 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    LED_Toggle_Timeout(led_blink_rate[ButtonControl_GetRate()]);
-    debug_uart_print("%s\n", msg);
+    cur_led_rate = ButtonControl_GetRate();
+    LED_Toggle_Timeout(led_blink_rate[cur_led_rate]);
+    debug_uart_print("Current LED blink rate: %d ms\n", led_blink_rate[cur_led_rate]);
   }
   /* USER CODE END 3 */
 
