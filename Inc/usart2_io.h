@@ -9,7 +9,9 @@ operations with standard library printf()/scanf() functions
 #define _UART2_IO_H_
 
 #include <stdarg.h>
+#include <stddef.h>
 #include <__vfprintf.h>
+#include "stm32l4xx_hal.h"
 
 extern UART_HandleTypeDef huart2;
 
