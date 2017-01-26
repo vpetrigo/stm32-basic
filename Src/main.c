@@ -38,7 +38,7 @@
 #include <string.h>
 #include "led_blink.h"
 #include "button_control.h"
-#include "usart2_io.h"
+#include "print.h"
 
 /* USER CODE END Includes */
 
@@ -73,7 +73,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  const char msg[] = "LED is blinking\n";
+  const char msg[] = "LED is blinking";
+  const char msg2[] = "Hello, world!";
 
   /* USER CODE END 1 */
 
@@ -101,9 +102,7 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
     LED_Toggle_Timeout(led_blink_rate[ButtonControl_GetRate()]);
-    for (size_t i = 0; i < strlen(msg); ++i) {
-      uart2_putc(msg[i], NULL);
-    }
+    debug_uart_print("%s\n", msg);
   }
   /* USER CODE END 3 */
 
