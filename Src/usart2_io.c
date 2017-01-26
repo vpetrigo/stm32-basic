@@ -19,6 +19,11 @@ operations with standard library printf()/scanf() functions
 #define HAL_OneByte_Transmit(uart, data) \
   HAL_UART_Transmit((uart), (data), ONE_BYTE_PKG, UART_TIMEOUT)
 
+#define HAL_OneByte_Receive(uart, data) \
+  HAL_UART_Receive((uart), (data), ONE_BYTE_PKG, UART_TIMEOUT)
+
+static int uart2_ungot = EOF;
+
 int uart2_putc(int ch, __printf_t *ctx) {
   while (HAL_OneByte_Transmit(&huart2, (uint8_t *) &ch) != HAL_OK) {
   }
@@ -37,6 +42,42 @@ int uart2_printf(const char *fmt, ...) {
   iod.output_fn = uart2_putc;
   n = __vfprintf(&iod, fmt, ap);
   va_end(ap);
+
+  return n;
+}
+
+int uart2_ungetc(int ch) {
+  uart2_ungot = ch;
+}
+
+int uart2_getc(void) {
+  int ch = '\0';
+
+  if (uart2_ungot != EOF) {
+    ch = uart2_ungot;
+    uart2_ungot = EOF;
+    
+    return ch;
+  }
+  else {
+    while (HAL_OneByte_Receive(&huart2, (uint8_t *) &ch) != HAL_OK) {
+    }
+
+    return ch;
+  }
+}
+
+int uart2_scanf(const char *fmt, ...) {
+  __stream_scanf_t iod;
+  va_list a;
+  int n;
+
+  va_start(a, fmt);
+  iod.is_string = 0;
+  iod.getc_fn = uart2_getc;
+  iod.ungetc_fn = uart2_ungetc;
+  n = __vfscanf((__scanf_t *) &iod, (const unsigned char *) fmt, a);
+  va_end(a);
 
   return n;
 }

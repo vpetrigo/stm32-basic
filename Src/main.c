@@ -74,7 +74,7 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   const char msg[] = "LED is blinking";
-  const char msg2[] = "Hello, world!";
+  const char msg2[16];
 
   /* USER CODE END 1 */
 
@@ -92,6 +92,9 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
   ButtonControl_SetUpRateRange(COUNT_OF(led_blink_rate));
+  debug_uart_print("Please, enter something\n");
+  uart2_scanf("%s", msg2);
+  debug_uart_print("Scanf got: %s\n", msg2);
   /* USER CODE END 2 */
 
   /* Infinite loop */

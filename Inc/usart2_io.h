@@ -20,4 +20,10 @@ int uart2_putc(int ch, __printf_t *ctx);
 // CrossWorks definition for printf function
 int uart2_printf(const char *fmt, ...);
 
+// Function for getting/ungetting character
+int uart2_ungetc(int ch);
+int uart2_getc(void);
+
+int uart2_scanf(const char *fmt, ...);
+
 #endif // _USART2_IO_H_
