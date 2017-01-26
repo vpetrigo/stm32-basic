@@ -74,6 +74,7 @@ int uart2_getc(void) {
 }
 
 int uart2_scanf(const char *fmt, ...) {
+  __HAL_UART_DISABLE_IT(&huart2, UART_IT_RXNE);
   __stream_scanf_t iod;
   va_list a;
   int n;
@@ -84,6 +85,7 @@ int uart2_scanf(const char *fmt, ...) {
   iod.ungetc_fn = uart2_ungetc;
   n = __vfscanf((__scanf_t *)&iod, (const unsigned char *)fmt, a);
   va_end(a);
+  __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
 
   return n;
 }
