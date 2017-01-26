@@ -5,9 +5,9 @@ USART2 module that implements functions for performing input/output
 operations with standard library printf()/scanf() functions
 */
 
-#include <limits.h>
 #include "usart2_io.h"
 #include "main.h"
+#include <limits.h>
 
 #define LF '\n'
 #define CR '\r'
@@ -25,6 +25,12 @@ operations with standard library printf()/scanf() functions
 static int uart2_ungot = EOF;
 
 int uart2_putc(int ch, __printf_t *ctx) {
+  if (ch == LF) {
+    char carriage_ret = CR;
+
+    while (HAL_OneByte_Transmit(&huart2, (uint8_t *) &carriage_ret) != HAL_OK) {
+    }
+  }
   while (HAL_OneByte_Transmit(&huart2, (uint8_t *) &ch) != HAL_OK) {
   }
 
@@ -56,11 +62,11 @@ int uart2_getc(void) {
   if (uart2_ungot != EOF) {
     ch = uart2_ungot;
     uart2_ungot = EOF;
-    
+
     return ch;
   }
   else {
-    while (HAL_OneByte_Receive(&huart2, (uint8_t *) &ch) != HAL_OK) {
+    while (HAL_OneByte_Receive(&huart2, (uint8_t *)&ch) != HAL_OK) {
     }
 
     return ch;
@@ -76,7 +82,7 @@ int uart2_scanf(const char *fmt, ...) {
   iod.is_string = 0;
   iod.getc_fn = uart2_getc;
   iod.ungetc_fn = uart2_ungetc;
-  n = __vfscanf((__scanf_t *) &iod, (const unsigned char *) fmt, a);
+  n = __vfscanf((__scanf_t *)&iod, (const unsigned char *)fmt, a);
   va_end(a);
 
   return n;
