@@ -10,7 +10,6 @@ Utilize HAL_SYSTICK_Callback
 // Private variable for storing ms_ticks
 static volatile uint32_t ms_tick = 0;
 
-
 void HAL_SYSTICK_Callback(void) {
   ++ms_tick;
 }
