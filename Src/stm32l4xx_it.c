@@ -35,10 +35,6 @@
 #include "stm32l4xx.h"
 #include "stm32l4xx_it.h"
 
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
 /* External variables --------------------------------------------------------*/
 
 /******************************************************************************/
@@ -50,9 +46,6 @@
 */
 void SysTick_Handler(void)
 {
-  /* USER CODE BEGIN SysTick_IRQn 0 */
-
-  /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   HAL_SYSTICK_IRQHandler();
 }
@@ -69,13 +62,7 @@ void SysTick_Handler(void)
 */
 void EXTI15_10_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
-
-  /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
-  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
-
-  /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
