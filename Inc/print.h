@@ -1,6 +1,5 @@
 /*
 Author: Vladimir Petrigo
-
 That header defines some macro for using with USART2 printf function
 */
 
@@ -16,6 +15,5 @@ That header defines some macro for using with USART2 printf function
 #endif // DEBUG
 
 #define user_uart_print(fmt, ...) uart2_printf((fmt), ##__VA_ARGS__)
-
 
 #endif // _PRINT_H
